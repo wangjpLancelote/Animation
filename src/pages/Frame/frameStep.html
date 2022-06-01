@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frame</title>
+</head>
+<style>
+     #divParent div {
+        width:200px;
+        height:200px;
+        background-size: cover;
+        background:url('https://cdn.jsdelivr.net/gh/wangjpLancelote/images-hosting@master/garden.4u7oiiedka00.webp') no-repeat scroll 0px 0px transparent;
+        /* border: 1px solid #ccc; */
+        position:absolute; top:0px; left:0px; z-index:1;
+      }
+</style>
+<body>
+  <div id="divParent" style=" position:relative;">
+    <div id="haorooms1" ></div>
+    <div id="haorooms2" ></div>
+  </div>
+</body>
+<script>
+  var i = 0;
+  var nowShow = 2;
+  var divParent = document.getElementById("divParent");
+  window.setInterval(frameAnmi, 1000);
+  function frameAnmi() {
+      if (i > 200) { i = 0; }
+      nowShow = (nowShow == 2) ? 1 : 2;
+      var logo = document.getElementById("haorooms" + nowShow);
+      logo.style.backgroundPosition = "-" + i * 75 + "px 0px";
+      // logo.style.backgroundColor = 'red';
+      divParent.appendChild(logo);
+      i++; 
+  }
+</script>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试onLoad</title>
+</head>
+<style>
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+<body>
+  <div class="box" id="box">
+    <!-- <img src="https://res-hdt.hzjizhun.com/interaction-ad-h5/qa/0.0.1/assets/images/202003/guagua2/background.fda5f53.webp" alt="" onload="handleLoad()"> -->
+  </div>
+</body>
+<script>
+  function handleLoad (img) {
+    console.log('>>>>>>>>img', img);
+  }
+  const img = new Image();
+  img.src = 'https://res-hdt.hzjizhun.com/interaction-ad-h5/qa/0.0.1/assets/images/202003/guagua2/background.fda5f53.webp';
+  img.onloadstart = (e) => {
+    console.log('start', e);
+  }
+  img.onload = (imgData) => {
+    console.log('imgData', imgData);
+    console.log('complete', img.complete);
+  }
+  
+  const boxDiv = document.querySelector('#box');
+  boxDiv.appendChild(img);
+
+</script>
+</html>

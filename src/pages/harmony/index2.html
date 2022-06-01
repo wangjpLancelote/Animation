@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xx</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    html, body { height: 100% }
+    body {
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+  </style>
+  <style>
+    canvas {
+      width: 100px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <canvas class="total"></canvas>
+    <canvas class="test"></canvas>
+  </div>
+
+  <script>
+    // 高斯模糊
+    const gaussBlur = function (imgData, radius) {
+ 
+      radius *= 3;    //不知为什么,我的模糊半径是 css中 filter:bulr 值的三倍时效果才一致。
+
+      //Copy图片内容
+      let pixes = new Uint8ClampedArray(imgData.data);
+      const width = imgData.width;
+      const height = imgData.height;
+      let gaussMatrix = [],
+          gaussSum,
+          x, y,
+          r, g, b, a,
+          i, j, k,
+          w;
+
+      radius = Math.floor(radius);
+      const sigma = radius / 3;
+
+      a = 1 / (Math.sqrt(2 * Math.PI) * sigma);
+      b = -1 / (2 * sigma * sigma);
+
+      //生成高斯矩阵
+      for (i = -radius; i <= radius; i++) {
+          gaussMatrix.push(a * Math.exp(b * i * i));
+      }
+
+      //y 方向一维高斯运算
+      for (x = 0; x < width; x++) {
+          for (y = 0; y < height; y++) {
+              r = g = b = a = gaussSum = 0;
+              for (j = -radius; j <= radius; j++) {
+                  k = y + j;
+
+                  if (k >= 0 && k < height) {
+                      i = (k * width + x) * 4;
+                      w = gaussMatrix[j + radius];
+
+                      r += pixes[i] * w;
+                      g += pixes[i + 1] * w;
+                      b += pixes[i + 2] * w;
+                      a += pixes[i + 3] * w;
+
+                      gaussSum += w;
+                  }
+              }
+              i = (y * width + x) * 4;
+              imgData.data.set([r, g, b, a].map(v=>v / gaussSum), i);
+          }
+      }
+
+      return imgData
+    }
+
+    // 生成新的canvas
+    function newCanvas(width, lineWidth, noShadow) {
+      var canvas = document.createElement('canvas')
+      var ctx = canvas.getContext('2d')
+      canvas.style.width = width + 'px'
+      canvas.style.height = width + 'px'
+
+      canvas.width = width
+      canvas.height = width
+
+      ctx.lineWidth = lineWidth
+
+      // 阴影
+      if (!noShadow) {
+        ctx.shadowBlur = 6
+        ctx.shadowColor = "#fff"
+      } 
+
+      return [canvas, ctx]
+    }
+
+    // 在canvas上画圆
+    function drawArc(ctx, width, x, y, R) {
+      ctx.beginPath()
+      ctx.arc(x, y, R, 0, Math.PI * 2)
+
+      ctx.strokeStyle = '#fff'
+      ctx.stroke()
+    }
+
+    // 绘制上半圆
+    function drawUper(width, lineWidth, moveup_distance, R) {
+      const [canvas, ctx] = newCanvas(width, lineWidth)
+      drawArc(ctx, width, width / 2, width + width / 2 - moveup_distance, R)
+      return canvas
+    }
+
+    // 绘制下半圆
+    function drawDown(width, lineWidth, moveup_distance, R, blur_radius) {
+      const downH = width + 20
+
+      const [canvas, ctx] = newCanvas(downH, lineWidth)
+      drawArc(ctx, width, width / 2, width / 2, R)
+
+      // 高斯模糊
+      if (blur_radius > 1) {
+        var imgData = ctx.getImageData(0, 0, downH, downH)
+        gaussBlur(imgData, blur_radius)
+        ctx.putImageData(imgData, 0, 0)
+      }
+
+      const [canvas1, ctx1] = newCanvas(downH, lineWidth, true)
+      ctx1.drawImage(canvas, 0, width - moveup_distance, width, downH, 0, 0, width, downH)
+
+      return canvas1
+    }
+
+    // 总的绘制入口
+    function drawtotal(ctx, width, lineWidth, moveup_distance, R, blur_radius) {
+      // 清除画布
+      var imgData = ctx.createImageData(width, width * 2)
+      ctx.putImageData(imgData, 0, 0)
+
+      ctx.drawImage(drawUper(width, lineWidth, moveup_distance, R), 0, 0)
+      ctx.drawImage(drawDown(width, lineWidth, moveup_distance, R, blur_radius), 0, width + 0)
+    }
+
+    // tween动画计算函数
+    const tween = (total, duration, curStep) => {
+      return (total / duration) * curStep
+    }
+    const tween1 = (from, to, duration, curStep) => {
+      return curStep >= 00
+        ? curStep >= duration ? to : ((to - from) / duration) * curStep + from
+        : from
+    }
+
+    var c = document.querySelector('.total')
+    var ctx = c.getContext('2d')
+
+    var curStep = 0
+    var step = 40
+    var duration = 1200
+    var blurCurStep = -step * 20
+
+    const width = 100
+    const lineWidth = 15 // 圆白边宽度
+    const R = 40 // 圆半径
+
+    c.width = width
+    c.height = width * 2
+
+    function anim() {
+      curStep += step
+      curStep = Math.min(duration, curStep)
+      blurCurStep += step
+      drawtotal(ctx, width, lineWidth, tween(50, duration, curStep), R, tween1(6, 1, duration, blurCurStep))
+      if (curStep < duration || blurCurStep < duration) {
+        requestAnimationFrame(anim)
+      }
+    }
+    anim()
+
+    function test () {
+      var t = document.querySelector('.test');
+      var tx = t.getContext('2d');
+      drawArc(tx, 50, 25, 25, 25);
+    }
+    test();
+  </script>
+</body>
+</html>
