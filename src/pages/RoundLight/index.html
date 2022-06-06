@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoundLight</title>
+</head>
+<style>
+.light {
+  --size: 15rem;
+  --color: cyan;
+  --border-color: #fff;
+  width: var(--size);
+  height: var(--size);
+  border: calc(var(--size) * 0.05) solid var(--border-color);
+  border-radius: 50%;
+  box-shadow: 0 0 calc(var(--size) * 0.1) var(--color), 0 0 calc(var(--size) * 0.1) var(--color) inset;
+  /* 边框border + box-shadow 内外阴影 = 光环 */
+
+  -webkit-box-reflect: below calc(var(--size) * 0.1) linear-gradient(transparent, transparent, rgba(0, 0, 0, .2));
+  animation: light-transform 4s linear infinite;
+}
+@keyframes light-transform {
+  100% {
+    filter: hue-rotate(360deg);
+    -webkit-box-reflect: below calc(var(--size) * 0.1) linear-gradient(transparent, transparent, rgba(0, 0, 0, .2));
+  }
+}
+.container {
+  width: 100%;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+}
+</style>
+<body>
+  <div class="container">
+    <div class="light">
+
+    </div>
+  </div>
+  
+</body>
+</html>
