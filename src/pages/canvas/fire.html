@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fire</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background-color: #000000;
+  }
+  .container {
+
+  }
+  #canvas {
+    position: absolute;
+    z-index: 0;
+  }
+</style>
+<body>
+  <div class="container">
+    <canvas id="canvas"></canvas>
+  </div>
+</body>
+<script>
+  const canvas = document.querySelector('canvas');
+  const container = document.querySelector('.container');
+  const ctx = canvas.getContext('2d');
+  let originX = 100, originY = 100;
+  let hue = Math.random() * 360;
+  let hueVariance = 60;
+  /** 随机颜色 */
+  function setColors (filework) {
+    filework.hue = Math.floor(Math.random() * (hue + hueVariance) - (hue - hueVariance) + (hue - hueVariance));
+    filework.brightness = Math.floor(Math.random() * 21) + 50;
+    filework.alpha = Math.floor((Math.random() * 60) + 40) / 100;
+  }
+  /** 保持缩放，将canvas 投射到整个页面上 */
+  function resize () {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  document.addEventListener('resize', resize);
+
+  /** 添加粒子 */
+  function addFires (x, y) {
+    originX = x;
+    originY = y;
+    drawFires();
+  }
+
+  /** 获取鼠标点击的坐标 */
+  function clickSite (e) {
+    let x = e.clientX;
+    let y = e.clientY;
+    addFires(x, y);
+  }
+
+  /** 绘制烟花
+   *  三个关键点
+   *  1.烟花需要扩散
+   *  2.烟花需要坠落曲线 ease-in-out-in
+   *  3.烟花粒子需要能够消失
+   */
+  function drawFires () {
+    /** 粒子数量 */
+    let count = 10;
+    /** 初始半径, 烟花波动的范围 */
+    let radius = 30;
+    for (let i = 0; i < count; ++i) {
+      let angle = 360 / count * i; // 每个角度
+      let radians = angle * Math.PI / 180;
+      let moveX = originX + Math.cos(radians) * radius;
+      let moveY = originY + Math.sin(radians) * radius;
+
+      ctx.beginPath();
+      ctx.arc(moveX, moveY, 2, Math.PI * 2, false);
+      ctx.closePath();
+      ctx.fillStyle = '#ff0000';
+      ctx.fill();
+    }
+  }
+
+  window.onload = () => {
+    
+    document.addEventListener('click', clickSite);
+  }
+
+  function tick () {
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = `rgba(0, 0, 0, 0.1)`; // 拖尾效果，上一个淡出
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'lighter';
+    drawFires();
+    requestAnimationFrame(tick);
+  }
+
+  // setInterval(() => {
+  //   addFires(Math.random() * canvas.width, Math.random() * canvas.height);
+  //   addFires(Math.random() * canvas.width, Math.random() * canvas.height);
+  // }, 500)
+
+  // tick();
+</script>
+</html>

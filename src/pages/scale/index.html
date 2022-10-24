@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>放大镜</title>
+  <style>
+    .glassTitle {
+  color: #89cff0;
+  text-align: center;
+}
+
+.box {
+  width: 80vw;
+  min-width: 800px;
+  height: 80vh;
+  min-height: 600px;
+  line-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #f2f3f4;
+  margin: 10px auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 1px #5d8aa8;
+}
+
+.glassWrapper{
+  line-height: 0;
+  position: relative;
+}
+
+.img {
+  display: block;
+  width: 250px;
+  height: auto;
+}
+
+.glass {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: #89cff0;
+  opacity: .5;
+  display: none;
+}
+
+.bigWrapper {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  background-color: #fff;
+  border: 1px dashed #89cff0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bigImg {
+  width: 2500px;
+  display: none;
+  position: absolute;
+}
+  </style>
+</head>
+<body>
+  <h1 class="glassTitle">放大镜练习</h1>
+  <div class="box">
+    <div class="glassWrapper">
+      <img src="./assets/nine_squares.png" class="img"/>
+      <div class="glass" id="glass"></div>
+    </div>
+    <div class="bigWrapper">
+      <img src="./assets/nine_squares.png" class="bigImg"/>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+  // 
+  const box = document.querySelector('.box'); // 盒子
+  const img = document.querySelector('.img'); // 图片
+  const bigWrapper = document.querySelector('.bigWrapper'); // 大图片的盒子
+  const glassWrapper = document.querySelector('.glassWrapper'); // 放大镜的盒子
+  const glass = document.querySelector(".glass"); // 放大镜
+  const bigImg = document.querySelector('.bigImg'); // 大图片
+
+  glassWrapper.addEventListener('mouseover', () => {
+    glass.style.display = 'block';
+    bigImg.style.display = 'block';
+  });
+
+  glassWrapper.addEventListener('mouseout', () => {
+    glass.style.display = 'none';
+    bigImg.style.display = 'none';
+  })
+  box.addEventListener('mousemove', (e) => {
+    // 该操作让glassWrapper的左上角变成坐标原点, 因为glass是先相对于glassWrapper而移动的
+    const x = e.pageX - glassWrapper.offsetLeft;
+    const y = e.pageY - glassWrapper.offsetTop;
+    // 让鼠标在glass的中间位置
+    let width = x - glass.offsetWidth / 2;
+    let height = y - glass.offsetHeight / 2;
+    // 让glass不超出img内部
+    if (width <= 0) {
+        width = 0;
+    } else if (width >= glassWrapper.offsetWidth - glass.offsetWidth) {
+        width = glassWrapper.offsetWidth - glass.offsetWidth;
+    }
+    if (height <= 0) {
+        height = 0;
+    } else if (height >= glassWrapper.offsetHeight - glass.offsetHeight) {
+        height = glassWrapper.offsetHeight - glass.offsetHeight;
+    }
+
+    // 改变放大镜的位置
+    glass.style.left = width + 'px';
+    glass.style.top = height + 'px';
+
+    // 改变大图片的位置
+    bigImg.style.width = img.offsetWidth * bigWrapper.offsetWidth / glass.offsetWidth + 'px';
+    bigImg.style.left = - width * bigImg.offsetWidth / img.offsetWidth + 'px';
+    bigImg.style.top = - height * bigImg.offsetHeight / img.offsetHeight + 'px';
+  })
+})
+  </script>
+</body>
+</html>
