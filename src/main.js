@@ -17,7 +17,7 @@ console.log('file', file);
 const streamFile = fs.createReadStream('../src/pages/canvas/展示背景.png');
 
 
-var s3 = new AWS.S3({ accessKeyId: 'AKIAZXDBJDONXKYSRCWD', secretAccessKey: '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', region: 'ap-south-1'});
+var s3 = new AWS.S3({ accessKeyId: 'AKIAZXDBJDONXKYSRCWD', secretAccessKey: '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', region: 'ap-southeast-1'});
 
 var s3Uat = new AWS.S3({ accessKeyId: 'AKIAQZPDLWVANCGIDWQX', secretAccessKey: '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', region: 'ap-southeast-1'});
 
@@ -63,7 +63,7 @@ const run = async () => {
 
 
 const params = {
-  Bucket: 'winnerspin-front-pub',
+  Bucket: 'winnerspin-front-public',
   Key: 'test/展示背景.png',
   Body: streamFile,
   ContentType: 'image/png'

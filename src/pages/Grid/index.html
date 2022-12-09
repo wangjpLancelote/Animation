@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid</title>
+</head>
+<style>
+  .container {
+    width: 400px;
+    display: grid;
+    grid-template-columns: 100px auto 100px;
+    grid-template-rows: repeat(3, 100px);
+    border: 1px solid #ccc;
+    /* height: 100px; */
+    column-gap: 10px;
+    row-gap: 10px;
+    grid-auto-flow: column;
+    /* place-items: end end; */
+    grid-template-areas: '.  item-1  item-9'
+                         'item-6 item-4 item-8'
+                         '.   .   item-5';
+  }
+  .item {
+    border: 1px solid red;
+    height: 100px;
+  }
+  .item-1 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-area: item-1;
+    background-color: red;
+  }
+  .item-2 {
+    grid-area: item-2;
+    background-color: green;
+  }
+  .item-3 {
+    grid-area: item-3;
+    background-color: yellow;
+  }
+  .item-4 {
+    grid-area: item-4;
+    background-color: gray;
+  }
+  .item-5 {
+    grid-area: item-5;
+    background-color: blue;
+  }
+  .item-6 {
+    grid-area: item-6;
+    background-color: pink;
+  }
+  .item-7 {
+    grid-area: item-7;
+    background-color: purple;
+  }
+  .item-8 {
+    grid-area: item-8;
+    background-color: peru;
+  }
+  .item-9 {
+    grid-area: item-9;
+    background-color: dodgerblue;
+  }
+</style>
+<body>
+  <div class="container">
+      <div class="item item-1">1</div>
+      <div class="item item-2">2</div>
+      <div class="item item-3">3</div>
+      <div class="item item-4">4</div>
+      <div class="item item-5">5</div>
+      <div class="item item-6">6</div>
+      <div class="item item-7">7</div>
+      <div class="item item-8">8</div>
+      <div class="item item-9">9</div>
+  </div>
+</body>
+</html>

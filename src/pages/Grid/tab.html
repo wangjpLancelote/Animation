@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tab</title>
+</head>
+<style>
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 1200px;
+    position: relative;
+  }
+  .tab {
+    width: 400px;
+    height: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #000;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .tab-animation {
+    animation: scaleHeight .6s ease-in 1;
+    animation-fill-mode: forwards;
+  }
+  .tab-animation-zoom {
+    animation: zoomHeight .6s linear 1;
+    animation-fill-mode: forwards;
+  }
+  @keyframes scaleHeight {
+    from {
+      height: 2px;
+    }
+    to {
+      height: 100px;
+    }
+  }
+  @keyframes zoomHeight {
+    from {
+      height: 100px;
+    }
+    to {
+      height: 10px;
+    }
+  }
+  .icon {
+    width: 20px;
+    height: 10px;
+    /* border: 1px solid #ccc; */
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    /* width: 0;
+    height: 0;
+    border-style:solid;
+    border-width: 0 30px 30px;
+    border-color: transparent transparent #000000;
+    position: relative;
+    cursor: pointer; */
+  }
+  .icon::after {
+    display: inline-block;
+    border: 10px solid transparent;
+    border-bottom-color: #000;
+    content: '';
+    position: relative;
+    /* content: '';
+    border-style: solid;
+    border-width: 0 20px 20px;
+    border-color: transparent transparent #FFFFFF;
+    position: absolute;
+    top: 6px;
+    left: -20px; */
+  }
+  .icon-zoom {
+    width: 20px;
+    height: 10px;
+    /* border: 1px solid #ccc; */
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+  }
+  .icon-zoom::after {
+    display: inline-block;
+    border: 10px solid transparent;
+    border-top-color: #000;
+    content: '';
+    position: relative;
+  }
+  .content {
+    display: none;
+  }
+  .header {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 4px #000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    top: 0px;
+  }
+  .header_animation_in {
+    animation: moveIn 1s ease-in 1;
+    animation-fill-mode: forwards;
+  }
+  .header_animation_out {
+    animation: moveOut 1s ease-in 1;
+    animation-fill-mode: forwards;
+  }
+  @keyframes moveIn {
+    from {
+      transform: translateY(-100px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes moveOut {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(-100px);
+    }
+  }
+  .home {
+    width: 100px;
+    height: 80%;
+    text-align: center;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .home::after {
+    content: '';
+    background: linear-gradient(90deg, #000 0%, #fff 100%);
+    display: inline-block;
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .connect {
+    width: 100px;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .connect::after {
+    content: '';
+    background: linear-gradient(90deg, #000 0%, #fff 100%);
+    display: inline-block;
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+</style>
+<body>
+  <div class="box">
+    <div class="header">
+      <div class="home">首页</div>
+      <div class="connect">图标</div>
+    </div>
+    <div class="tab">
+      <div class="icon"></div>
+      <div class="content">缴费卡省的JFK多久啊是发动机萨芬反对犯得上发范德萨是否 丰富的第三方</div>
+    </div>
+  </div>
+</body>
+<script>
+  const tab = document.querySelector('.tab');
+  const icon = document.querySelector('.icon');
+  const content = document.querySelector('.content');
+  let isAnimation = false;
+  tab.onclick = function () {
+    if (!isAnimation) {
+      isAnimation = true;
+      tab.classList.remove('tab-animation-zoom')
+      tab.classList.add('tab-animation');
+      icon.classList.add('icon-zoom')
+      content.style.display = 'block';
+    } else {
+      isAnimation = false;
+      tab.classList.remove('tab-animation');
+      tab.classList.add('tab-animation-zoom')
+      icon.classList.remove('icon-zoom')
+      content.style.display = 'none';
+    }
+  }
+
+  let timer = null;
+  let isScroll = false
+  const header = document.querySelector('.header');
+  window.onscroll = () => {
+    isScroll = true;
+    header.classList.add('header_animation_out');
+    header.classList.remove('header_animation_in');
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      isScroll = false
+      header.classList.remove('header_animation_out');
+      header.classList.add('header_animation_in')
+    }, 2000)
+  }
+</script>
+</html>

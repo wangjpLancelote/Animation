@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow</title>
+</head>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  html, body { height: 100% }
+  body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: black;
+  }
+  .container {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .shadow {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 70px;
+    height: 70px;
+    border: 15px solid white;
+    border-radius: 50%;
+    transform: translateY(50%);
+    box-shadow: 0 0 6px white, inset 0 0 6px white;
+    -webkit-box-reflect: below 1px -webkit-linear-gradient(transparent,transparent 50%,rgba(0,0,0,.8));
+  }
+  .progress {
+    width: 200px;
+    height: 20px;
+    background: repeating-linear-gradient(45deg, #30e8bf 25%, #ff8235 0, #ff8235 50%, #30e8bf 0, #30e8bf 75%, #ff8235 0);
+    background-size: 30px 30px;
+    animation: roll 1s linear infinite;
+  }
+  @keyframes roll {
+    from {
+      background-position-x: 0;
+    }
+    to {
+      background-position-x: 30px;
+    }
+  }
+
+</style>
+<body>
+  <div class="container">
+    <div class="shadow">
+    </div>
+  </div>
+  <div class="progress"></div>
+</body>
+</html>
